@@ -11,9 +11,9 @@ export default class App extends Component {
             showsHorizontalScrollIndicator={false}
             horizontal={true}
             alwaysBounceHorizontal={true}
-            onScrollToIndexFailed={() => {}}
             bounces={true}
             offsetSelection={0}
+            delta={5}
           />
         </View>
       </View>
@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     margin: "auto",
-    color: "black",
-    backgroundColor: "pink"
+    color: "black"
   }
 });

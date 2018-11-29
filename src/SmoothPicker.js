@@ -1,45 +1,15 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import { StyleSheet, View, FlatList, Text, Dimensions } from "react-native";
+import { StyleSheet, View, FlatList, Text } from "react-native";
+import { isSelected } from "./logic";
 
 class SmoothPicker extends PureComponent {
   state = {
-    selected: this.props.initialScrollIndex,
-    screenWidth: Dimensions.get("window").width,
-    screenHeight: Dimensions.get("window").height
+    selected: this.props.initialScrollIndex
   };
 
-  onIsSelected = (tabOptions, onSelected, deltaSelection, offsetSelection) => {
-    const { selected, screenWidth, screenHeight } = this.state;
-    this.refs.Parent_View.measureInWindow((parentX, y, parentWidth, height) => {
-      tabOptions.forEach(option => {
-        const [ref, item, index] = option;
-        const minItemToTest = selected <= 10 ? 0 : selected - 10;
-        const maxItemToTest = selected + 10;
-        if (index >= minItemToTest && index <= maxItemToTest) {
-          if (ref) {
-            ref.measureInWindow((X, Y, width, height) => {
-              if (X >= 0 && X <= screenWidth) {
-                const gapToParentXBorder = X + width / 2 - parentX;
-                const leftLimit =
-                  parentWidth / 2 + offsetSelection - deltaSelection;
-                const rightLimit =
-                  parentWidth / 2 + offsetSelection + deltaSelection;
-                if (
-                  gapToParentXBorder >= leftLimit &&
-                  gapToParentXBorder <= rightLimit
-                ) {
-                  if (index !== selected) {
-                    onSelected(item, index);
-                    this.setState({ selected: index });
-                  }
-                }
-              }
-            });
-          }
-        }
-      });
-    });
+  handeSelection = index => {
+    this.setState({ selected: index });
   };
 
   render() {
@@ -49,8 +19,11 @@ class SmoothPicker extends PureComponent {
       onSelected,
       deltaSelection,
       offsetSelection,
-      initialScrollIndex
+      initialScrollIndex,
+      decelerationRate
     } = this.props;
+
+    const { selected } = this.state;
     const refTab = [];
     return (
       <View style={styles.container} ref="Parent_View">
@@ -60,28 +33,31 @@ class SmoothPicker extends PureComponent {
           keyExtractor={(_, index) => index.toString()}
           initialScrollIndex={initialScrollIndex}
           ref="List_Item"
+          decelerationRate={decelerationRate ? decelerationRate : 0.6}
           onScroll={() =>
-            this.onIsSelected(
+            isSelected(
+              this.refs.Parent_View,
+              selected,
               refTab,
               onSelected,
               deltaSelection,
-              offsetSelection
+              offsetSelection,
+              this.handeSelection
             )
           }
-          onMomentumScrollEnd={() => console.log("momentum down!")}
           renderItem={({ item, index }) => (
             <View style={styles.containerItem}>
               {typeof item === "number" || typeof item === "string" ? (
                 <Text
                   ref={ref => refTab.push([ref, item, index])}
-                  style={index === this.state.selected ? selectedStyle : {}}
+                  style={index === selected ? selectedStyle : {}}
                 >
                   {item}
                 </Text>
               ) : (
                 <View
                   ref={ref => refTab.push([ref, item, index])}
-                  style={index === this.state.selected ? selectedStyle : {}}
+                  style={index === selected ? selectedStyle : {}}
                 >
                   {item}
                 </View>
@@ -95,15 +71,10 @@ class SmoothPicker extends PureComponent {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    borderWidth: 1,
-    borderColor: "red"
-  },
+  container: {},
   containerItem: {
     width: 30,
     height: 15,
-    borderWidth: 1,
-    color: "blue",
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 15,
@@ -113,7 +84,7 @@ const styles = StyleSheet.create({
 
 SmoothPicker.defaultProps = {
   data: Array.from({ length: 100 }, (_, i) => 0 + i),
-  onSelected: (item, index) => ({ item: item, index: index }),
+  onSelected: data => data,
   selectedStyle: {
     color: "red",
     fontWeight: "bold"
