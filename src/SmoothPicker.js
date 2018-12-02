@@ -1,106 +1,189 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import { StyleSheet, View, FlatList, Text } from "react-native";
-import { isSelected } from "./logic";
+import { View, FlatList } from "react-native";
+import { SelectionItem, marginStart, marginEnd } from "./logic";
 
 class SmoothPicker extends PureComponent {
   state = {
-    selected: this.props.initialScrollIndex
+    selected: this.props.initialScrollIndex,
+    widthParent: null,
+    heightParent: null,
+    xParent: null,
+    yParent: null
   };
 
-  handeSelection = index => {
+  componentDidMount() {
+    const {
+      horizontal,
+      data,
+      offsetSelection,
+      onSelected,
+      initialScrollToIndex,
+      initialScrollAnimated,
+      initalScrollToIndexDelay
+    } = this.props;
+    const { widthParent, heightParent, selected } = this.state;
+    onSelected({ item: data[selected], index: selected });
+    if (initialScrollToIndex) {
+      setTimeout(() => {
+        this.scrollToIndex({
+          viewOffset: horizontal
+            ? widthParent / 2 + offsetSelection
+            : heightParent / 2 + offsetSelection,
+          index: selected,
+          animated: initialScrollAnimated
+        });
+      }, initalScrollToIndexDelay);
+    }
+  }
+
+  _handleSelection = index => {
     this.setState({ selected: index });
+  };
+
+  _renderItem = refTab => info => {
+    const { data, renderItem, horizontal, offsetSelection } = this.props;
+    const { item, index } = info;
+    return (
+      <View
+        key={index}
+        ref={ref => refTab.push([ref, item, index])}
+        style={{
+          marginLeft: marginStart(
+            horizontal,
+            index,
+            this.state.widthParent,
+            this.state.xParent,
+            offsetSelection
+          ),
+          marginRight: marginEnd(
+            horizontal,
+            data.length - 1,
+            index,
+            this.state.widthParent,
+            this.state.xParent,
+            offsetSelection
+          ),
+          marginTop: marginStart(
+            !horizontal,
+            index,
+            this.state.heightParent,
+            this.state.yParent,
+            offsetSelection
+          ),
+          marginBottom: marginEnd(
+            !horizontal,
+            data.length - 1,
+            index,
+            this.state.heightParent,
+            this.state.yParent,
+            offsetSelection
+          )
+        }}
+      >
+        {renderItem(info)}
+      </View>
+    );
+  };
+
+  scrollToEnd(params) {
+    if (this._listRef) {
+      this._listRef.scrollToEnd(params);
+    }
+  }
+  scrollToIndex(params) {
+    if (this._listRef) {
+      this._listRef.scrollToIndex(params);
+    }
+  }
+  scrollToItem(params) {
+    if (this._listRef) {
+      this._listRef.scrollToItem(params);
+    }
+  }
+  scrollToOffset(params) {
+    if (this._listRef) {
+      this._listRef.scrollToOffset(params);
+    }
+  }
+  recordInteraction() {
+    if (this._listRef) {
+      this._listRef.recordInteraction();
+    }
+  }
+  flashScrollIndicators() {
+    if (this._listRef) {
+      this._listRef.flashScrollIndicators();
+    }
+  }
+
+  _captureRef = ref => {
+    this._listRef = ref;
   };
 
   render() {
     const {
-      data,
-      selectedStyle,
+      horizontal,
       onSelected,
       deltaSelection,
-      offsetSelection,
-      initialScrollIndex,
-      decelerationRate
+      offsetSelection
     } = this.props;
 
     const { selected } = this.state;
     const refTab = [];
     return (
-      <View style={styles.container} ref="Parent_View">
+      <View
+        onLayout={({ nativeEvent: { layout } }) => {
+          this.setState({
+            widthParent: layout.width,
+            heightParent: layout.height,
+            xParent: layout.x,
+            yParent: layout.y
+          });
+        }}
+        ref="Parent_View"
+      >
         <FlatList
           {...this.props}
-          data={data}
-          keyExtractor={(_, index) => index.toString()}
-          initialScrollIndex={initialScrollIndex}
-          ref="List_Item"
-          decelerationRate={decelerationRate ? decelerationRate : 0.6}
           onScroll={() =>
-            isSelected(
+            SelectionItem(
+              horizontal,
               this.refs.Parent_View,
               selected,
               refTab,
               onSelected,
               deltaSelection,
               offsetSelection,
-              this.handeSelection
+              this._handleSelection
             )
           }
-          renderItem={({ item, index }) => (
-            <View style={styles.containerItem}>
-              {typeof item === "number" || typeof item === "string" ? (
-                <Text
-                  ref={ref => refTab.push([ref, item, index])}
-                  style={index === selected ? selectedStyle : {}}
-                >
-                  {item}
-                </Text>
-              ) : (
-                <View
-                  ref={ref => refTab.push([ref, item, index])}
-                  style={index === selected ? selectedStyle : {}}
-                >
-                  {item}
-                </View>
-              )}
-            </View>
-          )}
+          renderItem={this._renderItem(refTab)}
+          ref={this._captureRef}
         />
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {},
-  containerItem: {
-    width: 30,
-    height: 15,
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 15,
-    marginRight: 15
-  }
-});
-
 SmoothPicker.defaultProps = {
-  data: Array.from({ length: 100 }, (_, i) => 0 + i),
   onSelected: data => data,
-  selectedStyle: {
-    color: "red",
-    fontWeight: "bold"
-  },
+  horizontal: false,
   offsetSelection: 0,
   deltaSelection: 15,
-  initialScrollIndex: 5
+  initialScrollIndex: 1,
+  decelerationRate: 0.85,
+  initialScrollToIndex: true,
+  initialScrollAnimated: true,
+  initalScrollToIndexDelay: 150
 };
 
 SmoothPicker.propTypes = {
-  data: PropTypes.array.isRequired,
   onSelected: PropTypes.func.isRequired,
-  selectedStyle: PropTypes.object.isRequired,
   offsetSelection: PropTypes.number,
   deltaSelection: PropTypes.number,
-  initialScrollIndex: PropTypes.number
+  initialScrollToIndex: PropTypes.bool,
+  initialScrollAnimated: PropTypes.bool,
+  initalScrollToIndexDelay: PropTypes.number
 };
 
 export default SmoothPicker;

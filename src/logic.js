@@ -1,35 +1,51 @@
-export function isSelected(
+export function SelectionItem(
+  horizontal,
   parentRef,
   selected,
   tabOptions,
   onSelected,
   deltaSelection,
   offsetSelection,
-  handeSelection
+  handleSelection
 ) {
-  parentRef.measureInWindow((parentX, y, parentWidth, height) => {
-    const leftLimit = parentWidth / 2 + offsetSelection - deltaSelection,
-      rightLimit = parentWidth / 2 + offsetSelection + deltaSelection;
-    tabOptions.forEach(([ref, item, index]) => {
-      if (ref) {
-        if (
-          index >= (selected <= 10 ? 0 : selected - 9) &&
-          index <= selected + 9
-        ) {
+  parentRef.measureInWindow((parentX, parentY, parentWidth, parentHeight) => {
+    const startLimit =
+        (horizontal ? parentWidth : parentHeight) / 2 +
+        offsetSelection -
+        deltaSelection,
+      endLimit =
+        (horizontal ? parentWidth : parentHeight) / 2 +
+        offsetSelection +
+        deltaSelection;
+
+    tabOptions
+      .filter(
+        option =>
+          option[2] >= (selected <= 10 ? 0 : selected - 9) &&
+          option[2] <= selected + 9
+      )
+      .forEach(([ref, item, index]) => {
+        if (ref) {
           ref.measureInWindow((X, Y, width, height) => {
-            const gapToParentXBorder = X + width / 2 - parentX;
-            if (
-              gapToParentXBorder >= leftLimit &&
-              gapToParentXBorder <= rightLimit
-            ) {
+            const gapToParent =
+              (horizontal ? X : Y) +
+              (horizontal ? width : height) / 2 -
+              (horizontal ? parentX : parentY);
+            if (gapToParent >= startLimit && gapToParent <= endLimit) {
               if (index !== selected) {
                 onSelected({ item: item, index: index });
-                handeSelection(index);
+                handleSelection(index);
               }
             }
           });
         }
-      }
-    });
+      });
   });
+}
+
+export function marginStart(horizontal, index, size, pos, offset) {
+  return horizontal ? (index === 0 ? size / 2 - pos + offset : 0) : 0;
+}
+export function marginEnd(horizontal, length, index, size, pos, offset) {
+  return horizontal ? (index === length ? size / 2 - pos - offset : 0) : 0;
 }
