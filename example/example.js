@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text } from "react-native";
-import SmoothPicker from "./src/SmoothPicker";
+import SmoothPicker from "../src/SmoothPicker";
 
 const Bubble = props => {
   const { children, selected, horizontal } = props;
@@ -34,7 +34,6 @@ export default class App extends Component {
   };
 
   handleChange(index) {
-    console.log(index);
     this.setState(
       {
         selected: index

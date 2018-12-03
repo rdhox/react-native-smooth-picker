@@ -1,4 +1,4 @@
-import { SelectionItem, marginStart, marginEnd } from "./logic";
+import { SelectionItem, marginStart, marginEnd } from "../functions/logic";
 
 const mockParentRef = {
   measureInWindow: jest.fn(cb => cb(20, 20, 600, 600))

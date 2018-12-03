@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { View, FlatList } from "react-native";
-import { SelectionItem, marginStart, marginEnd } from "./logic";
+import { SelectionItem, marginStart, marginEnd } from "./functions/logic";
 
 class SmoothPicker extends PureComponent {
   state = {
@@ -48,6 +48,7 @@ class SmoothPicker extends PureComponent {
       <View
         key={index}
         ref={ref => refTab.push([ref, item, index])}
+        onLayout={() => {}}
         style={{
           marginLeft: marginStart(
             horizontal,
@@ -142,6 +143,7 @@ class SmoothPicker extends PureComponent {
           });
         }}
         ref="Parent_View"
+        style={{ opacity: 1 }}
       >
         <FlatList
           {...this.props}
@@ -179,11 +181,11 @@ SmoothPicker.defaultProps = {
 
 SmoothPicker.propTypes = {
   onSelected: PropTypes.func.isRequired,
-  offsetSelection: PropTypes.number,
-  deltaSelection: PropTypes.number,
-  initialScrollToIndex: PropTypes.bool,
-  initialScrollAnimated: PropTypes.bool,
-  initalScrollToIndexDelay: PropTypes.number
+  offsetSelection: PropTypes.number.isRequired,
+  deltaSelection: PropTypes.number.isRequired,
+  initialScrollToIndex: PropTypes.bool.isRequired,
+  initialScrollAnimated: PropTypes.bool.isRequired,
+  initalScrollToIndexDelay: PropTypes.number.isRequired
 };
 
 export default SmoothPicker;
