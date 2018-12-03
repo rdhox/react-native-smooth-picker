@@ -1,7 +1,7 @@
 {
   "name": "react-native-smooth-picker",
   "description": "A smooth picker for react-native",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": {
     "name": "Renaud Déchaux",
     "email": "contact@rdhox.io",
