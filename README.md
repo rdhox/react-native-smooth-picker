@@ -4,6 +4,12 @@
 
 ![alt text][example]
 
+## install
+
+```
+npm i react-native-smooth-picker
+```
+
 A React Native picker that used Flatlist component to easily display vertical or horizontal list.  
 The item in the middle of the list (per default) is selected. Work exactly like a Flatlist component with the additionnals props:
 
