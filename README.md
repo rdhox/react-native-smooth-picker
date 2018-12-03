@@ -43,11 +43,6 @@ export default class App extends Component {
   render() {
     return (
       <SmoothPicker
-        initialScrollIndex={5}
-        onScrollToIndexFailed={() => {}}
-        keyExtractor={(_, index) => index.toString()}
-        showsVerticalScrollIndicator={false}
-        bounces={true}
         offsetSelection={40}
         deltaSelection={20}
         data={Array.from({ length: 16 }, (_, i) => i)}
