@@ -13,7 +13,7 @@ The item in the middle of the list (per default) is selected. Work exactly like 
 | ------------------------ | :-----------------------------------------------------------------------------------: | :------: | ------: |
 | onSelected               |        function that have for argument ({ item, index }) of the selected item.        | function |         |
 | offsetSelection          | offset to move the abstract line from the middle of the list where items are selected |  number  |       0 |
-| deltaSelection           |              tolerance around the abstract line where items are selected              |  number  |      15 |
+| deltaSelection           |                width around the abstract line where items are selected                |  number  |      15 |
 | initialScrollToIndex     |        true if you want the list to scroll to an initial index after mounting         | boolean  |    true |
 | initialScrollAnimated    |                   true if you want the inital scroll te be animated                   | boolean  |    true |
 | initalScrollToIndexDelay |                delay of the start of the inital scroll after mounting                 |  number  |     150 |
