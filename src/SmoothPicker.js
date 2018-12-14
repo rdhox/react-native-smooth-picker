@@ -174,6 +174,19 @@ class SmoothPicker extends PureComponent {
           onMomentumScrollEnd={() => {
             if (magnet) this._select();
           }}
+          getItemLayout={(_, index) => ({
+            length: this.options[index]
+              ? horizontal
+                ? this.options[index].layout.width
+                : this.options[index].layout.height
+              : 30,
+            offset: this.options[index]
+              ? horizontal
+                ? this.options[index].left
+                : this.options[index].top
+              : 30 * index,
+            index
+          })}
           renderItem={this._renderItem}
           ref={this._captureRef}
         />
@@ -187,7 +200,7 @@ SmoothPicker.defaultProps = {
   horizontal: false,
   offsetSelection: 0,
   decelerationRate: 0.85,
-  initialScrollToIndex: null,
+  initialScrollToIndex: 1,
   magnet: false,
   scrollAnimation: false,
   initialDelayAnimation: 150

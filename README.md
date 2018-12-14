@@ -20,7 +20,7 @@ The item in the middle of the list (per default) is selected. Work exactly like 
 | onSelected            |        function that have for argument ({ item, index }) of the selected item.        | function |         |
 | offsetSelection       | offset to move the abstract line from the middle of the list where items are selected |  number  |       0 |
 | magnet                |                       scroll automatically on the selected item                       | boolean  |   false |
-| initialScrollToIndex  |           if you want the list to scroll to an initial index after mounting           |  number  |    null |
+| initialScrollToIndex  |           if you want the list to scroll to an initial index after mounting           |  number  |       1 |
 | scrollAnimation       |                      true if you want the scroll te be animated                       | boolean  |    true |
 | initialDelayAnimation |                delay of the start of the inital scroll after mounting                 |  number  |     150 |
 
