@@ -58,6 +58,6 @@ export default class App extends Component {
 
 You can find the code of the gif above in the `example/` folder.
 
-### Maintenance
+### Author
 
 [rdhox](https://github.com/rdhox), [Steed Monteiro](https://github.com/SteedMonteiro)
