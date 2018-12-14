@@ -147,7 +147,12 @@ class SmoothPicker extends PureComponent {
   };
 
   render() {
-    const { horizontal, offsetSelection, magnet } = this.props;
+    const {
+      horizontal,
+      offsetSelection,
+      magnet,
+      fixedItemsLength
+    } = this.props;
     return (
       <View
         onLayout={({ nativeEvent: { layout } }) => {
@@ -174,19 +179,31 @@ class SmoothPicker extends PureComponent {
           onMomentumScrollEnd={() => {
             if (magnet) this._select();
           }}
-          getItemLayout={(_, index) => ({
-            length: this.options[index]
-              ? horizontal
-                ? this.options[index].layout.width
-                : this.options[index].layout.height
-              : 30,
-            offset: this.options[index]
-              ? horizontal
-                ? this.options[index].left
-                : this.options[index].top
-              : 30 * index,
-            index
-          })}
+          getItemLayout={(_, index) => {
+            let itemLayout;
+            if (fixedItemsLength) {
+              itemLayout = {
+                length: fixedItemsLength,
+                offset: fixedItemsLength * index,
+                index
+              };
+            } else {
+              itemLayout = {
+                length: this.options[index]
+                  ? horizontal
+                    ? this.options[index].layout.width
+                    : this.options[index].layout.height
+                  : 30,
+                offset: this.options[index]
+                  ? horizontal
+                    ? this.options[index].left
+                    : this.options[index].top
+                  : 30 * index,
+                index
+              };
+            }
+            return itemLayout;
+          }}
           renderItem={this._renderItem}
           ref={this._captureRef}
         />
@@ -200,10 +217,11 @@ SmoothPicker.defaultProps = {
   horizontal: false,
   offsetSelection: 0,
   decelerationRate: 0.85,
-  initialScrollToIndex: 1,
+  initialScrollToIndex: null,
   magnet: false,
   scrollAnimation: false,
-  initialDelayAnimation: 150
+  initialDelayAnimation: 150,
+  fixedItemsLength: null
 };
 
 SmoothPicker.propTypes = {
@@ -212,7 +230,8 @@ SmoothPicker.propTypes = {
   initialScrollToIndex: PropTypes.number,
   scrollAnimation: PropTypes.bool.isRequired,
   initialDelayAnimation: PropTypes.number.isRequired,
-  magnet: PropTypes.bool.isRequired
+  magnet: PropTypes.bool.isRequired,
+  fixedItemsLength: PropTypes.number
 };
 
 export default SmoothPicker;
