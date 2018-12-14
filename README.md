@@ -60,4 +60,4 @@ You can find the code of the gif above in the `example/` folder.
 
 ### Author
 
-[rdhox](https://github.com/rdhox), [Steed Monteiro](https://github.com/SteedMonteiro)
+[rdhox](https://github.com/rdhox) - [Steed Monteiro](https://github.com/SteedMonteiro)
