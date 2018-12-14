@@ -21,7 +21,7 @@ The item in the middle of the list (per default) is selected. Work exactly like 
 | offsetSelection       |                              offset to move the abstract line from the middle of the list where items are selected                               |  number  |       0 |
 | magnet                |                                                    scroll automatically on the selected item                                                     | boolean  |   false |
 | initialScrollToIndex  |                                        if you want the list to scroll to an initial index after mounting                                         |  number  |    null |
-| scrollAnimation       |                                                    true if you want the scroll te be animated                                                    | boolean  |    true |
+| scrollAnimation       |                                                    true if you want the scroll te be animated                                                    | boolean  |    false |
 | initialDelayAnimation |                                              delay of the start of the inital scroll after mounting                                              |  number  |     150 |
 | fixedItemsLength      | if all the items of the list have the same height (vertical) or width (horizontal), enter the dimension here to activate the getItemLayout prop. |  number  |    null |
 
