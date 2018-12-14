@@ -40,9 +40,9 @@ export default class App extends Component {
       },
       () =>
         this.refList.scrollToIndex({
-          animated: true,
+          animated: false,
           index: index,
-          viewOffset: 125
+          viewOffset: 120
         })
     );
   }
@@ -53,15 +53,12 @@ export default class App extends Component {
       <View style={styles.container}>
         <View style={styles.wrapperHorizontal}>
           <SmoothPicker
-            initialScrollIndex={5}
             onScrollToIndexFailed={() => {}}
             ref={ref => (this.refList = ref)}
             keyExtractor={(_, index) => index.toString()}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             bounces={true}
-            offsetSelection={0}
-            deltaSelection={20}
             data={Array.from({ length: 16 }, (_, i) => 0 + i)}
             renderItem={({ item, index }) => (
               <Bubble horizontal selected={index === selected}>
@@ -72,13 +69,14 @@ export default class App extends Component {
         </View>
         <View style={styles.wrapperVertical}>
           <SmoothPicker
-            initialScrollIndex={5}
+            initialScrollToIndex={5}
+            magnet
+            scrollAnimation
             onScrollToIndexFailed={() => {}}
             keyExtractor={(_, index) => index.toString()}
             showsVerticalScrollIndicator={false}
             bounces={true}
-            offsetSelection={40}
-            deltaSelection={20}
+            offsetSelection={70}
             data={Array.from({ length: 16 }, (_, i) => 0 + i)}
             onSelected={({ item, index }) => this.handleChange(index)}
             renderItem={({ item, index }) => (

@@ -15,14 +15,14 @@ The item in the middle of the list (per default) is selected. Work exactly like 
 
 ### Ref
 
-| Props                    |                                      Description                                      |   Type   | Default |
-| ------------------------ | :-----------------------------------------------------------------------------------: | :------: | ------: |
-| onSelected               |        function that have for argument ({ item, index }) of the selected item.        | function |         |
-| offsetSelection          | offset to move the abstract line from the middle of the list where items are selected |  number  |       0 |
-| deltaSelection           |                width around the abstract line where items are selected                |  number  |      15 |
-| initialScrollToIndex     |        true if you want the list to scroll to an initial index after mounting         | boolean  |    true |
-| initialScrollAnimated    |                   true if you want the inital scroll te be animated                   | boolean  |    true |
-| initalScrollToIndexDelay |                delay of the start of the inital scroll after mounting                 |  number  |     150 |
+| Props                 |                                      Description                                      |   Type   | Default |
+| --------------------- | :-----------------------------------------------------------------------------------: | :------: | ------: |
+| onSelected            |        function that have for argument ({ item, index }) of the selected item.        | function |         |
+| offsetSelection       | offset to move the abstract line from the middle of the list where items are selected |  number  |       0 |
+| magnet                |                       scroll automatically on the selected item                       |  number  |      15 |
+| initialScrollToIndex  |           if you want the list to scroll to an initial index after mounting           |  number  |    null |
+| scrollAnimation       |                      true if you want the scroll te be animated                       | boolean  |    true |
+| initialDelayAnimation |                delay of the start of the inital scroll after mounting                 |  number  |     150 |
 
 ### Simple Example
 
@@ -44,7 +44,7 @@ export default class App extends Component {
     return (
       <SmoothPicker
         offsetSelection={40}
-        deltaSelection={20}
+        magnet
         data={Array.from({ length: 16 }, (_, i) => i)}
         onSelected={({ item, index }) => this.handleChange(index)}
         renderItem={({ item, index }) => (
@@ -57,3 +57,7 @@ export default class App extends Component {
 ```
 
 You can find the code of the gif above in the `example/` folder.
+
+### Maintenance
+
+[rdhox](https://github.com/rdhox), [Steed Monteiro](https://github.com/SteedMonteiro)

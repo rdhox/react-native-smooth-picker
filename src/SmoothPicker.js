@@ -26,8 +26,6 @@ class SmoothPicker extends PureComponent {
     } = this.props;
     const { selected } = this.state;
 
-    console.log(selected, initialScrollToIndex);
-
     if (initialScrollToIndex) {
       onSelected({ item: data[selected], index: selected });
       setTimeout(() => this._select(), initialDelayAnimation);
@@ -38,8 +36,6 @@ class SmoothPicker extends PureComponent {
     try {
       const { horizontal, scrollAnimation } = this.props;
       const { selected, scrollPosition } = this.state;
-
-      console.log(selected);
 
       if (this.options[selected]) {
         let newPosition = horizontal
