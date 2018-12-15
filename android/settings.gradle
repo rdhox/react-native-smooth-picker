@@ -1,0 +1,3 @@
+rootProject.name = 'reactNativeSmoothPicker'
+
+include ':app'
