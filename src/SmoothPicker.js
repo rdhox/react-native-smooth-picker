@@ -17,10 +17,6 @@ class SmoothPicker extends PureComponent {
 		scrollPosition: 0,
 	}
 
-	get ref() {
-		return this.refs["list"]
-	}
-
 	componentDidMount() {
 		const {
 			data,
@@ -139,56 +135,59 @@ class SmoothPicker extends PureComponent {
 		const { horizontal, offsetSelection, magnet, fixedItemsLength } = this.props
 
 		return (
-			<FlatList
-				{...this.props}
+			<View
 				onLayout={({ nativeEvent: { layout } }) => {
 					this.widthParent = layout.width
 					this.heightParent = layout.height
 					this.xParent = layout.x
 					this.yParent = layout.y
 				}}
-				onScroll={({ nativeEvent }) =>
-					onSelect(
-						nativeEvent,
-						this.options,
-						this._handleSelection,
-						horizontal,
-						offsetSelection,
-						this.heightParent,
-						this.widthParent
-					)
-				}
-				getItemLayout={(_, index) => {
-					let itemLayout
-					if (fixedItemsLength) {
-						itemLayout = {
-							length: fixedItemsLength,
-							offset: fixedItemsLength * index,
-							index,
-						}
-					} else {
-						itemLayout = {
-							length: this.options[index]
-								? horizontal
-									? this.options[index].layout.width
-									: this.options[index].layout.height
-								: 30,
-							offset: this.options[index]
-								? horizontal
-									? this.options[index].left
-									: this.options[index].top
-								: 30 * index,
-							index,
-						}
+			>
+				<FlatList
+					{...this.props}
+					onScroll={({ nativeEvent }) =>
+						onSelect(
+							nativeEvent,
+							this.options,
+							this._handleSelection,
+							horizontal,
+							offsetSelection,
+							this.heightParent,
+							this.widthParent
+						)
 					}
-					return itemLayout
-				}}
-				onMomentumScrollEnd={() => {
-					if (magnet) this._select()
-				}}
-				renderItem={this._renderItem}
-				ref={"list"}
-			/>
+					getItemLayout={(_, index) => {
+						let itemLayout
+						if (fixedItemsLength) {
+							itemLayout = {
+								length: fixedItemsLength,
+								offset: fixedItemsLength * index,
+								index,
+							}
+						} else {
+							itemLayout = {
+								length: this.options[index]
+									? horizontal
+										? this.options[index].layout.width
+										: this.options[index].layout.height
+									: 30,
+								offset: this.options[index]
+									? horizontal
+										? this.options[index].left
+										: this.options[index].top
+									: 30 * index,
+								index,
+							}
+						}
+						return itemLayout
+					}}
+					onMomentumScrollEnd={() => {
+						if (magnet) this._select()
+					}}
+					renderItem={this._renderItem}
+					ref={"list"}
+				/>
+			</View>
 		)
 	}
 }
