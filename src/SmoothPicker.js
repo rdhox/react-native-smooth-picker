@@ -197,10 +197,10 @@ class SmoothPicker extends PureComponent {
 					snapToInterval={
 						fixedItemsLength
 							? fixedItemsLength
-							: this.options[index]
+							: this.options[0]
 							? horizontal
-								? this.options[index].layout.width
-								: this.options[index].layout.height
+								? this.options[0].layout.width
+								: this.options[0].layout.height
 							: 30
 					}
 					snapToStart={true}
