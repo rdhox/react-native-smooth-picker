@@ -62,6 +62,28 @@ class SmoothPicker extends PureComponent {
 		})
 	}
 
+	_select = () => {
+		try {
+			const { horizontal, scrollAnimation } = this.props
+			const { selected, scrollPosition } = this.state
+
+			if (this.options[selected]) {
+				let newPosition = horizontal
+					? this.options[selected].left +
+					  this.options[selected].layout.width / 2
+					: this.options[selected].top + this.options[selected].layout.width / 2
+				if (newPosition !== scrollPosition) {
+					this.scrollToOffset({
+						offset: newPosition,
+						animated: scrollAnimation,
+					})
+				}
+			}
+		} catch (e) {
+			console.log("error", e)
+		}
+	}
+
 	_renderItem = info => {
 		const { data, renderItem, horizontal, offsetSelection } = this.props
 		const { item, index } = info
@@ -109,41 +131,6 @@ class SmoothPicker extends PureComponent {
 		)
 	}
 
-	scrollToEnd(params) {
-		if (this._listRef) {
-			this._listRef.scrollToEnd(params)
-		}
-	}
-	scrollToIndex(params) {
-		if (this._listRef) {
-			this._listRef.scrollToIndex(params)
-		}
-	}
-	scrollToItem(params) {
-		if (this._listRef) {
-			this._listRef.scrollToItem(params)
-		}
-	}
-	scrollToOffset(params) {
-		if (this._listRef) {
-			this._listRef.scrollToOffset(params)
-		}
-	}
-	recordInteraction() {
-		if (this._listRef) {
-			this._listRef.recordInteraction()
-		}
-	}
-	flashScrollIndicators() {
-		if (this._listRef) {
-			this._listRef.flashScrollIndicators()
-		}
-	}
-
-	_captureRef = ref => {
-		this._listRef = ref
-	}
-
 	render() {
 		const { horizontal, offsetSelection, magnet, fixedItemsLength } = this.props
 		return (
@@ -154,7 +141,6 @@ class SmoothPicker extends PureComponent {
 					this.xParent = layout.x
 					this.yParent = layout.y
 				}}
-				style={{ opacity: 1 }}
 			>
 				<FlatList
 					{...this.props}
@@ -194,21 +180,11 @@ class SmoothPicker extends PureComponent {
 						}
 						return itemLayout
 					}}
-					snapToInterval={
-						fixedItemsLength
-							? fixedItemsLength
-							: this.options[0]
-							? horizontal
-								? this.options[0].layout.width
-								: this.options[0].layout.height
-							: 30
-					}
-					snapToStart={true}
-					snapToAlignment={"center"}
-					decelerationRate="normal"
-					onEndReachedThreshold={0.01}
+					onMomentumScrollEnd={() => {
+						if (magnet) this._select()
+					}}
 					renderItem={this._renderItem}
-					ref={this._captureRef}
+					ref={ref => (this._listRef = this.props.ref = ref)}
 				/>
 			</View>
 		)
