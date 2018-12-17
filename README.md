@@ -53,7 +53,6 @@ export default class App extends Component {
     return (
       <SmoothPicker
         offsetSelection={40}
-        magnet
         data={Array.from({ length: 16 }, (_, i) => i)}
         onSelected={({ item, index }) => this.handleChange(index)}
         renderItem={({ item, index }) => (
