@@ -1,17 +1,69 @@
-export default function(nativeEvent, options, handleSelection, horizontal) {
+export default function(
+  nativeEvent,
+  selected,
+  options,
+  handleSelection,
+  scrollPosition,
+  horizontal
+) {
   const cursor = horizontal
     ? nativeEvent.contentOffset.x
     : nativeEvent.contentOffset.y;
 
-  options.map(option => {
-    if (horizontal) {
-      if (cursor >= option.left && cursor < option.right) {
-        return handleSelection(option.item, option.index, cursor);
+  const direction = horizontal
+    ? scrollPosition > cursor
+      ? "right"
+      : "left"
+    : scrollPosition > cursor
+    ? "down"
+    : "top";
+
+  switch (direction) {
+    case "left":
+      if (options[selected + 1]) {
+        if (cursor > options[selected].right) {
+          handleSelection(
+            options[selected + 1].item,
+            options[selected + 1].index,
+            cursor
+          );
+        }
       }
-    } else {
-      if (cursor >= option.top && cursor < option.bottom) {
-        return handleSelection(option.item, option.index, cursor);
+      break;
+    case "right":
+      if (options[selected - 1]) {
+        if (cursor < options[selected].left) {
+          handleSelection(
+            options[selected - 1].item,
+            options[selected - 1].index,
+            cursor
+          );
+        }
       }
-    }
-  });
+      break;
+    case "top":
+      if (options[selected + 1]) {
+        if (cursor > options[selected].bottom) {
+          handleSelection(
+            options[selected + 1].item,
+            options[selected + 1].index,
+            cursor
+          );
+        }
+      }
+      break;
+    case "down":
+      if (options[selected - 1]) {
+        if (cursor < options[selected].top) {
+          handleSelection(
+            options[selected - 1].item,
+            options[selected - 1].index,
+            cursor
+          );
+        }
+      }
+      break;
+    default:
+      break;
+  }
 }

@@ -75,6 +75,7 @@ export default class App extends Component {
             keyExtractor={(_, index) => index.toString()}
             showsVerticalScrollIndicator={false}
             bounces={true}
+            offsetSelection={40}
             data={Array.from({ length: 15 }, (_, i) => 0 + i)}
             onSelected={({ item, index }) => this.handleChange(index)}
             renderItem={({ item, index }) => (
