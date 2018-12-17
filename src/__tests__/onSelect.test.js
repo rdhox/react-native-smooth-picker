@@ -13,9 +13,18 @@ describe("operation", () => {
       item: {},
       index: i
     }));
+    const selected = 7;
+    const scrollPosition = 599;
     const fnMock = jest.fn((item, index, cursor) => index);
     const horizontal = true;
-    onSelect(nativeEvent, options, fnMock, horizontal);
+    onSelect(
+      nativeEvent,
+      selected,
+      options,
+      fnMock,
+      scrollPosition,
+      horizontal
+    );
     expect(fnMock).toHaveBeenCalledTimes(1);
     expect(fnMock.mock.results[0].value).toBe(8);
   });
@@ -31,9 +40,18 @@ describe("operation", () => {
       item: {},
       index: i
     }));
+    const selected = 3;
+    const scrollPosition = 299;
     const fnMock = jest.fn((item, index, cursor) => index);
     const horizontal = false;
-    onSelect(nativeEvent, options, fnMock, horizontal);
+    onSelect(
+      nativeEvent,
+      selected,
+      options,
+      fnMock,
+      scrollPosition,
+      horizontal
+    );
     expect(fnMock).toHaveBeenCalledTimes(1);
     expect(fnMock.mock.results[0].value).toBe(4);
   });

@@ -15,16 +15,15 @@ The item in the middle of the list (per default) is selected. Work exactly like 
 
 ### Props
 
-| Props                 |                                                                                                      Description                                                                                                       |   Type   |  Default |
-| --------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------: | -------: |
-| onSelected            |                                                                        function that have for argument ({ item, index }) of the selected item.                                                                         | function |          |
-| offsetSelection       |                                                                 offset to move the abstract line from the middle of the list where items are selected                                                                  |  number  |        0 |
-| magnet                |                                                                                       scroll automatically on the selected item                                                                                        | boolean  |    false |
-| initialScrollToIndex  |                                                                           if you want the list to scroll to an initial index after mounting                                                                            |  number  |     null |
-| scrollAnimation       |                                                                                       true if you want the scroll te be animated                                                                                       | boolean  |    false |
-| initialDelayAnimation |                                                                                 delay of the start of the inital scroll after mounting                                                                                 |  number  |      150 |
-| snapInterval          | if all items of the list have the same height (vertical) or width (horizontal), enter the dimension here to activate the snapToInterval props. Notice that if you use this prop, the magnet comportment will not work. |  number  |     null |
-| snapToAlignment       |                                                                   If you use snapInterval, you can set snapToAlignment to 'start', 'center', 'end'.                                                                    |   enum   | 'center' |
+| Props                 |                                                                  Description                                                                   |   Type   |  Default |
+| --------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------: | :------: | -------: |
+| onSelected            |                                    function that have for argument ({ item, index }) of the selected item.                                     | function |          |
+| offsetSelection       |                             offset to move the abstract line from the middle of the list where items are selected                              |  number  |        0 |
+| initialScrollToIndex  |                                       if you want the list to scroll to an initial index after mounting                                        |  number  |     null |
+| scrollAnimation       |                                                   true if you want the scroll te be animated                                                   | boolean  |    false |
+| initialDelayAnimation |                                             delay of the start of the inital scroll after mounting                                             |  number  |      150 |
+| snapInterval          | if all items of the list have the same height (vertical) or width (horizontal), enter the dimension here to activate the snapToInterval props. |  number  |     null |
+| snapToAlignment       |                               If you use snapInterval, you can set snapToAlignment to 'start', 'center', 'end'.                                |   enum   | 'center' |
 
 ### Using methods of Flatlist
 
