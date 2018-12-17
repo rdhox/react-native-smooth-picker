@@ -1,6 +1,6 @@
 ## React Native Smooth Picker
 
-[example]: https://github.com/rdhox/react-native-smooth-picker/blob/optimization/assets/demo.gif "example react-native-smooth-picker"
+[example]: https://github.com/rdhox/react-native-smooth-picker/blob/master/assets/demo.gif "example react-native-smooth-picker"
 
 ![alt text][example]
 
