@@ -39,7 +39,7 @@ export default class App extends Component {
         selected: index
       },
       () => {
-        this.refList.refs.list.scrollToIndex({
+        this.refList.refs.smoothPicker.scrollToIndex({
           animated: false,
           index: index,
           viewOffset: -30
@@ -75,8 +75,6 @@ export default class App extends Component {
             keyExtractor={(_, index) => index.toString()}
             showsVerticalScrollIndicator={false}
             bounces={true}
-            snapInterval={50}
-            decelerationRate="fast"
             data={Array.from({ length: 15 }, (_, i) => 0 + i)}
             onSelected={({ item, index }) => this.handleChange(index)}
             renderItem={({ item, index }) => (

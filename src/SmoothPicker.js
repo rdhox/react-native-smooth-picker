@@ -1,11 +1,11 @@
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { View, FlatList } from "react-native";
 import onSelect from "./functions/onSelect";
 import onSave from "./functions/onSave";
 import { marginStart, marginEnd } from "./functions/onMargin";
 
-class SmoothPicker extends PureComponent {
+class SmoothPicker extends Component {
   widthParent = null;
   heightParent = null;
   xParent = null;
@@ -16,6 +16,10 @@ class SmoothPicker extends PureComponent {
     selected: this.props.initialScrollToIndex,
     scrollPosition: 0
   };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState.selected !== this.state.selected;
+  }
 
   componentDidMount() {
     const {
@@ -28,29 +32,7 @@ class SmoothPicker extends PureComponent {
 
     if (initialScrollToIndex) {
       onSelected({ item: data[selected], index: selected });
-      setTimeout(() => {
-        try {
-          const { horizontal, scrollAnimation } = this.props;
-          const { selected, scrollPosition } = this.state;
-
-          if (this.options[selected]) {
-            let newPosition = horizontal
-              ? this.options[selected].left +
-                this.options[selected].layout.width / 2
-              : this.options[selected].top +
-                this.options[selected].layout.width / 2;
-
-            if (newPosition !== scrollPosition) {
-              this.refs["list"].scrollToOffset({
-                offset: newPosition,
-                animated: scrollAnimation
-              });
-            }
-          }
-        } catch (e) {
-          console.log("error", e);
-        }
-      }, initialDelayAnimation);
+      setTimeout(() => this._select(), initialDelayAnimation);
     }
   }
 
@@ -65,7 +47,7 @@ class SmoothPicker extends PureComponent {
   _select = () => {
     try {
       const { horizontal, scrollAnimation } = this.props;
-      const { selected, scrollPosition } = this.state;
+      const { selected } = this.state;
 
       if (this.options[selected]) {
         let newPosition = horizontal
@@ -73,8 +55,8 @@ class SmoothPicker extends PureComponent {
             this.options[selected].layout.width / 2
           : this.options[selected].top +
             this.options[selected].layout.width / 2;
-        if (newPosition !== scrollPosition) {
-          this.refs["list"].scrollToOffset({
+        if (newPosition !== this.scrollPosition) {
+          this.refs["smoothPicker"].scrollToOffset({
             offset: newPosition,
             animated: scrollAnimation
           });
@@ -133,13 +115,19 @@ class SmoothPicker extends PureComponent {
   };
 
   render() {
-    const { horizontal, offsetSelection, magnet, snapInterval } = this.props;
+    const {
+      horizontal,
+      offsetSelection,
+      magnet,
+      snapInterval,
+      snapToAlignment
+    } = this.props;
+
     let snap = {};
     if (snapInterval) {
       snap = {
         snapToInterval: snapInterval,
-        snapToStart: true,
-        snapToAlignment: "center"
+        snapToAlignment: snapToAlignment
       };
     }
 
@@ -195,7 +183,7 @@ class SmoothPicker extends PureComponent {
             if (magnet && !snapInterval) this._select();
           }}
           renderItem={this._renderItem}
-          ref={"list"}
+          ref={"smoothPicker"}
         />
       </View>
     );
@@ -211,7 +199,8 @@ SmoothPicker.defaultProps = {
   magnet: false,
   scrollAnimation: false,
   initialDelayAnimation: 150,
-  snapInterval: null
+  snapInterval: null,
+  snapToAlignment: "center"
 };
 
 SmoothPicker.propTypes = {
