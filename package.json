@@ -1,12 +1,19 @@
 {
   "name": "react-native-smooth-picker",
   "description": "A smooth picker for react-native",
-  "version": "0.0.2",
-  "author": {
-    "name": "Renaud Déchaux",
-    "email": "contact@rdhox.io",
-    "url": "https://rdhox.io"
-  },
+  "version": "0.0.3",
+  "contributors": [
+    {
+      "name": "Renaud Déchaux",
+      "email": "contact@rdhox.io",
+      "url": "https://rdhox.io"
+    },
+    {
+      "name": "Steed Monteiro",
+      "email": "steed.monteiro@gmail.com",
+      "url": "http://studiolabs.io"
+    }
+  ],
   "keywords": [
     "react",
     "react-native",
