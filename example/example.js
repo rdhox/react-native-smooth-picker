@@ -70,7 +70,7 @@ export default class App extends Component {
         </View>
         <View style={styles.wrapperVertical}>
           <SmoothPicker
-            initialScrollToIndex={5}
+            initialScrollToIndex={8}
             onScrollToIndexFailed={() => {}}
             keyExtractor={(_, index) => index.toString()}
             showsVerticalScrollIndicator={false}

@@ -14,7 +14,7 @@ class SmoothPicker extends Component {
   options = [];
 
   state = {
-    selected: this.props.initialScrollToIndex || 0,
+    selected: this.props.initialScrollToIndex,
     scrollPosition: 0
   };
 
@@ -31,7 +31,7 @@ class SmoothPicker extends Component {
     } = this.props;
     const { selected } = this.state;
 
-    if (initialScrollToIndex) {
+    if (initialScrollToIndex !== 0) {
       onSelected({ item: data[selected], index: selected });
       setTimeout(
         () =>
@@ -175,7 +175,7 @@ SmoothPicker.defaultProps = {
   horizontal: false,
   offsetSelection: 0,
   decelerationRate: 0.85,
-  initialScrollToIndex: null,
+  initialScrollToIndex: 1,
   magnet: false,
   scrollAnimation: false,
   initialDelayAnimation: 150,
@@ -186,7 +186,7 @@ SmoothPicker.defaultProps = {
 SmoothPicker.propTypes = {
   onSelected: PropTypes.func.isRequired,
   offsetSelection: PropTypes.number.isRequired,
-  initialScrollToIndex: PropTypes.number,
+  initialScrollToIndex: PropTypes.number.isRequired,
   scrollAnimation: PropTypes.bool.isRequired,
   initialDelayAnimation: PropTypes.number.isRequired,
   magnet: PropTypes.bool.isRequired,
