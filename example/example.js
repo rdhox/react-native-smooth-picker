@@ -30,7 +30,7 @@ const Bubble = props => {
 
 export default class App extends Component {
   state = {
-    selected: null
+    selected: 4
   };
 
   handleChange(index) {
@@ -54,7 +54,6 @@ export default class App extends Component {
       <View style={styles.container}>
         <View style={styles.wrapperHorizontal}>
           <SmoothPicker
-            initialScrollToIndex={8}
             onScrollToIndexFailed={() => {}}
             ref={ref => (this.refList = ref)}
             keyExtractor={(_, index) => index.toString()}
@@ -71,13 +70,12 @@ export default class App extends Component {
         </View>
         <View style={styles.wrapperVertical}>
           <SmoothPicker
-            initialScrollToIndex={8}
+            initialScrollToIndex={selected}
             onScrollToIndexFailed={() => {}}
             keyExtractor={(_, index) => index.toString()}
             showsVerticalScrollIndicator={false}
             bounces={true}
             offsetSelection={40}
-            magnet
             scrollAnimation
             data={Array.from({ length: 15 }, (_, i) => 0 + i)}
             onSelected={({ item, index }) => this.handleChange(index)}
