@@ -12,39 +12,16 @@ class SmoothPicker extends Component {
   xParent = null;
   yParent = null;
   onMomentum = false;
+  fingerAction = false;
   options = [];
 
   state = {
-    selected: this.props.initialScrollToIndex,
+    selected: 1,
     scrollPosition: 0
   };
 
   shouldComponentUpdate(nextProps, nextState) {
     return nextState.selected !== this.state.selected;
-  }
-
-  componentDidMount() {
-    const {
-      data,
-      onSelected,
-      initialScrollToIndex,
-      initialDelayAnimation
-    } = this.props;
-    const { selected } = this.state;
-
-    if (initialScrollToIndex !== 0) {
-      onSelected({ item: data[selected], index: selected });
-      setTimeout(
-        () =>
-          alignSelect(
-            this.props.horizontal,
-            this.props.scrollAnimation,
-            this.options[this.state.selected],
-            this.refs["smoothPicker"]
-          ),
-        initialDelayAnimation
-      );
-    }
   }
 
   _handleSelection = (item, index, scrollPosition) => {
@@ -125,16 +102,18 @@ class SmoothPicker extends Component {
         <FlatList
           {...this.props}
           {...snap}
-          onScroll={({ nativeEvent }) =>
-            onSelect(
-              nativeEvent,
-              this.state.selected,
-              this.options,
-              this._handleSelection,
-              this.state.scrollPosition,
-              horizontal
-            )
-          }
+          onScroll={({ nativeEvent }) => {
+            if (this.fingerAction) {
+              onSelect(
+                nativeEvent,
+                this.state.selected,
+                this.options,
+                this._handleSelection,
+                this.state.scrollPosition,
+                horizontal
+              );
+            }
+          }}
           getItemLayout={(_, index) => {
             let itemLayout;
             if (snapInterval) {
@@ -162,8 +141,10 @@ class SmoothPicker extends Component {
           }}
           onScrollBeginDrag={() => {
             this.onMomentum = true;
+            this.fingerAction = true;
           }}
           onMomentumScrollEnd={() => {
+            this.fingerAction = false;
             if (this.onMomentum && magnet && !snapInterval) {
               this.onMomentum = false;
               alignSelect(
@@ -187,10 +168,8 @@ SmoothPicker.defaultProps = {
   horizontal: false,
   offsetSelection: 0,
   decelerationRate: 0.85,
-  initialScrollToIndex: 1,
   magnet: false,
   scrollAnimation: false,
-  initialDelayAnimation: 150,
   snapInterval: null,
   snapToAlignment: "center"
 };
@@ -198,9 +177,7 @@ SmoothPicker.defaultProps = {
 SmoothPicker.propTypes = {
   onSelected: PropTypes.func.isRequired,
   offsetSelection: PropTypes.number.isRequired,
-  initialScrollToIndex: PropTypes.number.isRequired,
   scrollAnimation: PropTypes.bool.isRequired,
-  initialDelayAnimation: PropTypes.number.isRequired,
   magnet: PropTypes.bool.isRequired,
   snapInterval: PropTypes.number
 };
