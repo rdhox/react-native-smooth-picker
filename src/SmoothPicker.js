@@ -11,6 +11,7 @@ class SmoothPicker extends Component {
   heightParent = null;
   xParent = null;
   yParent = null;
+  onMomentum = false;
   options = [];
 
   state = {
@@ -39,10 +40,7 @@ class SmoothPicker extends Component {
             this.props.horizontal,
             this.props.scrollAnimation,
             this.options[this.state.selected],
-            this.state.scrollPosition,
-            this.refs["smoothPicker"],
-            null,
-            true
+            this.refs["smoothPicker"]
           ),
         initialDelayAnimation
       );
@@ -161,6 +159,20 @@ class SmoothPicker extends Component {
               };
             }
             return itemLayout;
+          }}
+          onScrollBeginDrag={() => {
+            this.onMomentum = true;
+          }}
+          onMomentumScrollEnd={() => {
+            if (this.onMomentum && magnet && !snapInterval) {
+              this.onMomentum = false;
+              alignSelect(
+                this.props.horizontal,
+                this.props.scrollAnimation,
+                this.options[this.state.selected],
+                this.refs["smoothPicker"]
+              );
+            }
           }}
           renderItem={this._renderItem}
           ref={"smoothPicker"}
