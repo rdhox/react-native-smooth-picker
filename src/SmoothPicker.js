@@ -41,7 +41,7 @@ class SmoothPicker extends Component {
         );
       }
     } catch (error) {
-      console.log("error", e);
+      console.log("error", error);
     }
   };
 
