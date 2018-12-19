@@ -24,22 +24,26 @@ class SmoothPicker extends Component {
   }
 
   _alignAfterMounting = () => {
-    const {
-        horizontal,
-        scrollAnimation,
-        initialScrollToIndex,
-        onSelected
-      } = this.props,
-      option = this.options[initialScrollToIndex];
+    try {
+      const {
+          horizontal,
+          scrollAnimation,
+          initialScrollToIndex,
+          onSelected
+        } = this.props,
+        option = this.options[initialScrollToIndex];
 
-    if (initialScrollToIndex) {
-      onSelected({ item: option.item, index: initialScrollToIndex });
-      alignSelect(
-        horizontal,
-        scrollAnimation,
-        option,
-        this.refs["smoothPicker"]
-      );
+      if (initialScrollToIndex) {
+        onSelected({ item: option.item, index: initialScrollToIndex });
+        alignSelect(
+          horizontal,
+          scrollAnimation,
+          option,
+          this.refs["smoothPicker"]
+        );
+      }
+    } catch (error) {
+      console.log("error", e);
     }
   };
 
