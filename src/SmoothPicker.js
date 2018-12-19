@@ -11,6 +11,7 @@ class SmoothPicker extends Component {
   onMomentum = false;
   fingerAction = false;
   options = [];
+  countItems = 0;
 
   state = {
     selected: this.props.initialScrollToIndex || 1,
@@ -24,10 +25,8 @@ class SmoothPicker extends Component {
   _alignAfterMounting = () => {
     try {
       const { horizontal, scrollAnimation, initialScrollToIndex } = this.props;
-      console.log(this.options);
       if (initialScrollToIndex) {
         const option = this.options[initialScrollToIndex];
-        console.log(option);
         if (option) {
           alignSelect(
             horizontal,
@@ -90,8 +89,10 @@ class SmoothPicker extends Component {
       <View
         key={index}
         onLayout={({ nativeEvent: { layout } }) => {
+          this.countItems = this.countItems + 1;
           this._save(index, layout, item, horizontal);
-          if (index === data.length - 1) {
+          if (this.countItems === data.length) {
+            this.countItems = 0;
             this._alignAfterMounting();
           }
         }}

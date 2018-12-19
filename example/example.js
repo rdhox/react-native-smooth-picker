@@ -55,6 +55,7 @@ export default class App extends Component {
         <View style={styles.wrapperHorizontal}>
           <SmoothPicker
             onScrollToIndexFailed={() => {}}
+            initialScrollToIndex={selected}
             ref={ref => (this.refList = ref)}
             keyExtractor={(_, index) => index.toString()}
             horizontal={true}
