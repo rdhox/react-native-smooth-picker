@@ -8,8 +8,6 @@ import { marginStart, marginEnd } from "./functions/onMargin";
 class SmoothPicker extends Component {
   widthParent = null;
   heightParent = null;
-  xParent = null;
-  yParent = null;
   onMomentum = false;
   fingerAction = false;
   options = [];
@@ -82,7 +80,14 @@ class SmoothPicker extends Component {
   };
 
   _renderItem = info => {
-    const { data, renderItem, horizontal, offsetSelection } = this.props;
+    const {
+      data,
+      renderItem,
+      horizontal,
+      offsetSelection,
+      startMargin,
+      endMargin
+    } = this.props;
     const { item, index } = info;
     return (
       <View
@@ -98,31 +103,31 @@ class SmoothPicker extends Component {
             horizontal,
             index,
             this.widthParent,
-            this.xParent,
-            offsetSelection
+            offsetSelection,
+            startMargin
           ),
           marginRight: marginEnd(
             horizontal,
             data.length - 1,
             index,
             this.widthParent,
-            this.xParent,
-            offsetSelection
+            offsetSelection,
+            endMargin
           ),
           marginTop: marginStart(
             !horizontal,
             index,
             this.heightParent,
-            this.yParent,
-            offsetSelection
+            offsetSelection,
+            startMargin
           ),
           marginBottom: marginEnd(
             !horizontal,
             data.length - 1,
             index,
             this.heightParent,
-            this.yParent,
-            offsetSelection
+            offsetSelection,
+            endMargin
           )
         }}
       >
@@ -148,8 +153,7 @@ class SmoothPicker extends Component {
         onLayout={({ nativeEvent: { layout } }) => {
           this.widthParent = layout.width;
           this.heightParent = layout.height;
-          this.xParent = layout.x;
-          this.yParent = layout.y;
+          console.log(layout);
         }}
         onScroll={({ nativeEvent }) => {
           if (this.fingerAction) {
@@ -228,7 +232,9 @@ SmoothPicker.propTypes = {
   scrollAnimation: PropTypes.bool.isRequired,
   magnet: PropTypes.bool.isRequired,
   snapInterval: PropTypes.number,
-  initialScrollToIndex: PropTypes.number
+  initialScrollToIndex: PropTypes.number,
+  startMargin: PropTypes.number,
+  endMargin: PropTypes.number
 };
 
 export default SmoothPicker;

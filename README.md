@@ -24,6 +24,8 @@ The item in the middle of the list (per default) is selected. Work exactly like 
 | scrollAnimation      |                                                                                       true if you want the scroll te be animated                                                                                       | boolean  |    false |
 | snapInterval         | if all items of the list have the same height (vertical) or width (horizontal), enter the dimension here to activate the snapToInterval props. Notice that if you use this prop, the magnet comportment will not work. |  number  |     null |
 | snapToAlignment      |                                                                   If you use snapInterval, you can set snapToAlignment to 'start', 'center', 'end'.                                                                    |   enum   | 'center' |
+| startMargin          |                                 Values of margins at the extremities of the list are calculated automatically. If values do not correspond to your need, you can enter them manually.                                  |  number  |          |
+| endMargin            |                                 Values of margins at the extremities of the list are calculated automatically. If values do not correspond to your need, you can enter them manually.                                  |  number  |          |
 
 ### Using Flatlist's methods
 
