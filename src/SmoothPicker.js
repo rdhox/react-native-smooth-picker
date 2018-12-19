@@ -45,7 +45,7 @@ class SmoothPicker extends Component {
     }
   };
 
-  _save = (item, layout, index, horizontal) => {
+  _save = (index, layout, item, horizontal) => {
     this.options[index] = {
       layout,
       item,
