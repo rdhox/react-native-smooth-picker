@@ -23,22 +23,19 @@ class SmoothPicker extends Component {
 
   _alignAfterMounting = () => {
     try {
-      const {
-          horizontal,
-          scrollAnimation,
-          initialScrollToIndex,
-          onSelected
-        } = this.props,
-        option = this.options[initialScrollToIndex];
-
+      const { horizontal, scrollAnimation, initialScrollToIndex } = this.props;
+      console.log(this.options);
       if (initialScrollToIndex) {
-        onSelected({ item: option.item, index: initialScrollToIndex });
-        alignSelect(
-          horizontal,
-          scrollAnimation,
-          option,
-          this.refs["smoothPicker"]
-        );
+        const option = this.options[initialScrollToIndex];
+        console.log(option);
+        if (option) {
+          alignSelect(
+            horizontal,
+            scrollAnimation,
+            option,
+            this.refs["smoothPicker"]
+          );
+        }
       }
     } catch (error) {
       console.log("error", error);
@@ -153,7 +150,6 @@ class SmoothPicker extends Component {
         onLayout={({ nativeEvent: { layout } }) => {
           this.widthParent = layout.width;
           this.heightParent = layout.height;
-          console.log(layout);
         }}
         onScroll={({ nativeEvent }) => {
           if (this.fingerAction) {
