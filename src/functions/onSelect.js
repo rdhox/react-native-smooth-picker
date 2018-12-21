@@ -9,6 +9,13 @@ export default function(
   const cursor = horizontal
     ? nativeEvent.contentOffset.x
     : nativeEvent.contentOffset.y;
+  
+  if(scrollPosition === null) {
+    if(options[selected]) {
+      const option = options[selected];
+      scrollPosition = horizontal ? option.left : option.top;
+    }
+  }
 
   const direction = horizontal
     ? scrollPosition > cursor
