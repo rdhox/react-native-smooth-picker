@@ -1,32 +1,36 @@
+import { NativeScrollEvent } from 'react-native';
+import { Option, HandleSelection } from '../SmoothPicker';
 export default function(
-  nativeEvent,
-  selected,
-  options,
-  handleSelection,
-  scrollPosition,
-  horizontal
+  nativeEvent: NativeScrollEvent,
+  selected: number,
+  options: Option[],
+  handleSelection: HandleSelection,
+  scrollPosition: number | null,
+  horizontal: boolean
 ) {
   const cursor = horizontal
     ? nativeEvent.contentOffset.x
     : nativeEvent.contentOffset.y;
-  
-  if(scrollPosition === null) {
-    if(options[selected]) {
+
+
+  let SP: number = scrollPosition || 0;
+  if (scrollPosition === null) {
+    if (options[selected]) {
       const option = options[selected];
-      scrollPosition = horizontal ? option.left : option.top;
+      SP = horizontal ? option.left : option.top;
     }
   }
 
   const direction = horizontal
-    ? scrollPosition > cursor
-      ? "right"
-      : "left"
-    : scrollPosition > cursor
-    ? "down"
-    : "top";
+    ? SP > cursor
+      ? 'right'
+      : 'left'
+    : SP > cursor
+    ? 'down'
+    : 'top';
 
   switch (direction) {
-    case "left":
+    case 'left':
       if (options[selected + 1]) {
         if (cursor > options[selected].right) {
           handleSelection(
@@ -37,7 +41,7 @@ export default function(
         }
       }
       break;
-    case "right":
+    case 'right':
       if (options[selected - 1]) {
         if (cursor < options[selected].left) {
           handleSelection(
@@ -48,7 +52,7 @@ export default function(
         }
       }
       break;
-    case "top":
+    case 'top':
       if (options[selected + 1]) {
         if (cursor > options[selected].bottom) {
           handleSelection(
@@ -59,7 +63,7 @@ export default function(
         }
       }
       break;
-    case "down":
+    case 'down':
       if (options[selected - 1]) {
         if (cursor < options[selected].top) {
           handleSelection(

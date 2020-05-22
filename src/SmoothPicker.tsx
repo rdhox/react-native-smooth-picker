@@ -1,89 +1,145 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { View, FlatList } from "react-native";
-import onSelect from "./functions/onSelect";
-import alignSelect from "./functions/alignSelect";
-import { marginStart, marginEnd } from "./functions/onMargin";
+import React, { Component } from 'react';
+import { View, FlatList, LayoutRectangle } from 'react-native';
+import onSelect from './functions/onSelect';
+import alignSelect from './functions/alignSelect';
+import { marginStart, marginEnd } from './functions/onMargin';
 
-class SmoothPicker extends Component {
-  widthParent = null;
-  heightParent = null;
-  onMomentum = false;
-  fingerAction = false;
-  options = [];
-  countItems = 0;
+export interface ListReturn {
+  item: any;
+  index: number;
+}
+
+export interface Option extends ListReturn {
+  layout: LayoutRectangle,
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+}
+
+export type SnapAlignement = 'start' | 'center' | 'end';
+
+export interface Snap {
+  snapToInterval: number,
+  snapToAlignment: SnapAlignement,
+}
+
+export type HandleSelection =  (item: any, index: number, scrollPosition: number) => void;
+
+interface Props {
+  data: any[];
+  renderItem: (obj: ListReturn) => React.ReactNode;
+  onSelected?: (obj: ListReturn) => void;
+  horizontal?: boolean;
+  offsetSelection?: number;
+  decelerationRate?: number;
+  magnet?: boolean;
+  scrollAnimation?: boolean;
+  snapInterval?: number | null;
+  snapToAlignment?: SnapAlignement;
+  initialScrollToIndex?: number;
+  startMargin?: number;
+  endMargin?: number;
+}
+
+interface State {
+  selected: number;
+  scrollPosition: number | null;
+}
+
+class SmoothPicker extends Component<Props, State> {
+  widthParent: number = 0;
+  heightParent: number = 0;
+  onMomentum: boolean = false;
+  fingerAction: boolean = false;
+  options: Option[] = [];
+  countItems: number = 0;
+  refList: React.RefObject<FlatList> = React.createRef();
 
   state = {
     selected: this.props.initialScrollToIndex || 1,
-    scrollPosition: null
+    scrollPosition: null,
   };
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps: Props, nextState: State) {
     return nextState.selected !== this.state.selected;
   }
 
   _alignAfterMount = () => {
     try {
-      const { horizontal, scrollAnimation, initialScrollToIndex } = this.props;
-      if (typeof initialScrollToIndex !== "undefined") {
+      const {
+        horizontal = false,
+        scrollAnimation = false,
+        initialScrollToIndex,
+      } = this.props;
+      if (typeof initialScrollToIndex !== 'undefined') {
         const option = this.options[initialScrollToIndex];
         if (option) {
           alignSelect(
             horizontal,
             scrollAnimation,
             option,
-            this.refs["smoothPicker"]
+            this.refList
           );
         }
       }
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
     }
   };
 
-  _save = (index, layout, item, horizontal) => {
-    this.options[index] = {
+  _save = (i: number, layout: LayoutRectangle, item: any, horizontal: boolean) => {
+    const nOpt: Option = {
       layout,
       item,
-      index
+      index: i,
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right:0,
     };
+    this.options[i] = nOpt;
 
-    for (let index in this.options) {
+    this.options.forEach(option => {
+      const { index } = option;
       if (horizontal) {
-        let left = this.options[index - 1] ? this.options[index - 1].right : 0;
-        let right = this.options[index - 1]
+        let left: number = this.options[index - 1] ? this.options[index - 1].right : 0;
+        let right: number = this.options[index - 1]
           ? left + this.options[index].layout.width
           : this.options[index].layout.width;
         this.options[index].right = right;
         this.options[index].left = left;
       } else {
-        let top = this.options[index - 1] ? this.options[index - 1].bottom : 0;
-        let bottom = this.options[index - 1]
+        let top: number = this.options[index - 1] ? this.options[index - 1].bottom : 0;
+        let bottom: number = this.options[index - 1]
           ? top + this.options[index].layout.height
           : this.options[index].layout.height;
         this.options[index].bottom = bottom;
         this.options[index].top = top;
       }
-    }
-  };
-
-  _handleSelection = (item, index, scrollPosition) => {
-    this.props.onSelected({ item, index });
-    this.setState({
-      selected: index,
-      scrollPosition: scrollPosition
     });
   };
 
-  _renderItem = info => {
+  _handleSelection: HandleSelection = (item, index, scrollPosition) => {
+    if (this.props.onSelected) {
+      this.props.onSelected({ item, index });
+    }
+    this.setState({
+      selected: index,
+      scrollPosition: scrollPosition,
+    });
+  };
+
+  _renderItem = (info: ListReturn) => {
     const {
       data,
       renderItem,
-      horizontal,
-      offsetSelection,
+      horizontal = false,
+      offsetSelection = 0,
       startMargin,
-      endMargin
+      endMargin,
     } = this.props;
+
     const { item, index } = info;
     return (
       <View
@@ -93,7 +149,7 @@ class SmoothPicker extends Component {
           if (this.countItems === data.length) {
             this.countItems = 0;
             this._alignAfterMount();
-          }else{
+          } else {
             this.countItems = this.countItems + 1;
           }
         }}
@@ -127,7 +183,7 @@ class SmoothPicker extends Component {
             this.heightParent,
             offsetSelection,
             endMargin
-          )
+          ),
         }}
       >
         {renderItem(info)}
@@ -136,13 +192,19 @@ class SmoothPicker extends Component {
   };
 
   render() {
-    const { horizontal, magnet, snapInterval, snapToAlignment } = this.props;
+    const {
+      horizontal = false,
+      magnet = false,
+      snapInterval = null,
+      snapToAlignment = 'center',
+      scrollAnimation = false,
+    } = this.props;
 
-    let snap = {};
+    let snap: Snap = {} as Snap;
     if (snapInterval) {
       snap = {
         snapToInterval: snapInterval,
-        snapToAlignment: snapToAlignment
+        snapToAlignment: snapToAlignment,
       };
     }
     return (
@@ -171,7 +233,7 @@ class SmoothPicker extends Component {
             itemLayout = {
               length: snapInterval,
               offset: snapInterval * index,
-              index
+              index,
             };
           } else {
             itemLayout = {
@@ -185,7 +247,7 @@ class SmoothPicker extends Component {
                   ? this.options[index].left
                   : this.options[index].top
                 : 30 * index,
-              index
+              index,
             };
           }
           return itemLayout;
@@ -199,40 +261,18 @@ class SmoothPicker extends Component {
           if (this.onMomentum && magnet && !snapInterval) {
             this.onMomentum = false;
             alignSelect(
-              this.props.horizontal,
-              this.props.scrollAnimation,
+              horizontal,
+              scrollAnimation,
               this.options[this.state.selected],
-              this.refs["smoothPicker"]
+              this.refList
             );
           }
         }}
         renderItem={this._renderItem}
-        ref={"smoothPicker"}
+        ref={this.refList}
       />
     );
   }
 }
-
-SmoothPicker.defaultProps = {
-  onSelected: data => data,
-  horizontal: false,
-  offsetSelection: 0,
-  decelerationRate: 0.85,
-  magnet: false,
-  scrollAnimation: false,
-  snapInterval: null,
-  snapToAlignment: "center"
-};
-
-SmoothPicker.propTypes = {
-  onSelected: PropTypes.func.isRequired,
-  offsetSelection: PropTypes.number.isRequired,
-  scrollAnimation: PropTypes.bool.isRequired,
-  magnet: PropTypes.bool.isRequired,
-  snapInterval: PropTypes.number,
-  initialScrollToIndex: PropTypes.number,
-  startMargin: PropTypes.number,
-  endMargin: PropTypes.number
-};
 
 export default SmoothPicker;

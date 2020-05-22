@@ -1,4 +1,10 @@
-export function marginStart(horizontal, index, size, offset, manualMargin) {
+export function marginStart(
+  horizontal: boolean,
+  index: number,
+  size: number,
+  offset: number,
+  manualMargin: number | undefined
+) {
   return horizontal
     ? index === 0
       ? manualMargin
@@ -8,12 +14,12 @@ export function marginStart(horizontal, index, size, offset, manualMargin) {
     : 0;
 }
 export function marginEnd(
-  horizontal,
-  length,
-  index,
-  size,
-  offset,
-  manualMargin
+  horizontal: boolean,
+  length: number,
+  index: number,
+  size: number,
+  offset: number,
+  manualMargin: number | undefined
 ) {
   return horizontal
     ? index === length
