@@ -23,11 +23,13 @@
     "ui",
     "form"
   ],
-  "main": "src/SmoothPicker.js",
+  "main": "build/SmoothPicker.js",
+  "types": "build/SmoothPicker.d.ts",
   "license": "MIT",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "build": "tsc"
   },
   "dependencies": {},
   "devDependencies": {
@@ -45,8 +47,8 @@
     "metro-react-native-babel-preset": "^0.58.0",
     "react-test-renderer": "16.11.0",
     "typescript": "^3.8.3",
-    "react": "16.11.0",
-    "react-native": "0.62.2"
+    "react": "16.6.1",
+    "react-native": "0.57.7"
   },
   "jest": {
     "preset": "react-native",
