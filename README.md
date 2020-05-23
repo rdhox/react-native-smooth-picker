@@ -6,8 +6,14 @@
 
 ## install
 
+__Alpha version available (*branch feature-typescript*): rewrite in TypeScript, this version will not be compatible with older one__:
+
 ```
-npm i react-native-smooth-picker
+yarn add react-native-smooth-picker@alpha
+```
+
+```
+yarn add react-native-smooth-picker
 ```
 
 A React Native picker coded in TypeScript that used Flatlist component to easily display vertical or horizontal list.  
