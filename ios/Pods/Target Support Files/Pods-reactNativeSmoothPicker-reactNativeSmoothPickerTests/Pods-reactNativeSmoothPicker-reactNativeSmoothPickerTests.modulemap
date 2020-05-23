@@ -1,0 +1,6 @@
+module Pods_reactNativeSmoothPicker_reactNativeSmoothPickerTests {
+  umbrella header "Pods-reactNativeSmoothPicker-reactNativeSmoothPickerTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,153 +1,164 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Text } from "react-native";
-import SmoothPicker from "../src/SmoothPicker";
+import React, { useRef, useState } from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import SmoothPicker from '../src/SmoothPicker';
 
-const Bubble = props => {
-  const { children, selected, horizontal } = props;
+const dataCity = [
+  'Paris',
+  'Berlin',
+  'Lisbonne',
+  'Budapest',
+  'Londres',
+  'Prague',
+  'Rome',
+  'Barcelone',
+  'Amsterdam',
+  'Dublin',
+  'Vienne',
+  'Madrid',
+  'Cracovie',
+  'Reykjavik',
+  'Istambul',
+  'Florence',
+  'Copenhague',
+  'Zagreb',
+  'Stockholm',
+  'Thessalonique',
+  'Marseille',
+  'Porto',
+  'Lugano',
+  'Bruxelles',
+  'Lyon',
+];
+
+const opacities = {
+  0: 1,
+  1: 1,
+  2: 0.6,
+  3: 0.3,
+  4: 0.1,
+};
+const sizeText = {
+  0: 20,
+  1: 15,
+  2: 10,
+};
+
+const Item = React.memo(({opacity, selected, vertical, fontSize, name}) => {
   return (
     <View
-      style={[
-        horizontal ? styles.itemStyleHorizontal : styles.itemStyleVertical,
-        selected &&
-          (horizontal
-            ? styles.itemSelectedStyleHorizontal
-            : styles.itemSelectedStyleVertical)
-      ]}
+      style={[styles.OptionWrapper, { opacity, borderColor: selected ? '#ABC9AF' : 'transparent', width: vertical ? 190 : 'auto'}]}
     >
-      <Text
-        style={{
-          textAlign: "center",
-          fontSize: selected ? 20 : 17,
-          color: selected ? "black" : "grey",
-          fontWeight: selected ? "bold" : "normal"
-        }}
-      >
-        {children}
-      </Text>
+    <Text style={{fontSize}}>
+      {name}
+    </Text>
+  </View>
+  );
+});
+
+
+
+
+const ItemToRender = ({item, index}, indexSelected, vertical) => {
+  const selected = index === indexSelected;
+  const gap = Math.abs(index - indexSelected);
+
+  let opacity = opacities[gap];
+  if (gap > 3) {
+    opacity = opacities[4];
+  }
+  let fontSize = sizeText[gap];
+  if (gap > 1) {
+    fontSize = sizeText[2];
+  }
+
+  return <Item opacity={opacity} selected={selected} vertical={vertical} fontSize={fontSize} name={item}/>;
+};
+
+const App = () => {
+
+  function handleChange(index) {
+    setSelected(index);
+    refPicker.current.scrollToIndex({
+      animated: false,
+      index: index,
+      viewOffset: -30,
+    });
+  }
+
+  const [ selected, setSelected ] = useState(4);
+  const refPicker = useRef(null);
+  return (
+    <View style={styles.container}>
+      <View style={styles.wrapperHorizontal}>
+        <SmoothPicker
+          initialScrollToIndex={selected}
+          refFlatList={refPicker}
+          keyExtractor={(_, index) => index.toString()}
+          horizontal={true}
+          scrollAnimation
+          showsHorizontalScrollIndicator={false}
+          data={dataCity}
+          renderItem={option => ItemToRender(option, selected, false)}
+        />
+      </View>
+      <View style={styles.wrapperVertical}>
+        <SmoothPicker
+          initialScrollToIndex={selected}
+          onScrollToIndexFailed={() => {}}
+          keyExtractor={(_, index) => index.toString()}
+          showsVerticalScrollIndicator={false}
+          data={dataCity}
+          scrollAnimation
+          onSelected={({ item, index }) => handleChange(index)}
+          renderItem={option => ItemToRender(option, selected, true)}
+          magnet
+        />
+      </View>
+      <View>
+        <Text>{`Your selection is ${dataCity[selected]}`}</Text>
+      </View>
     </View>
   );
 };
-
-export default class App extends Component {
-  state = {
-    selected: 4
-  };
-
-  handleChange(index) {
-    this.setState(
-      {
-        selected: index
-      },
-      () => {
-        this.refList.refs.smoothPicker.scrollToIndex({
-          animated: false,
-          index: index,
-          viewOffset: -30
-        });
-      }
-    );
-  }
-
-  render() {
-    const { selected } = this.state;
-    return (
-      <View style={styles.container}>
-        <View style={styles.wrapperHorizontal}>
-          <SmoothPicker
-            onScrollToIndexFailed={() => {}}
-            initialScrollToIndex={selected}
-            ref={ref => (this.refList = ref)}
-            keyExtractor={(_, index) => index.toString()}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            bounces={true}
-            data={Array.from({ length: 15 }, (_, i) => 0 + i)}
-            renderItem={({ item, index }) => (
-              <Bubble horizontal selected={index === selected}>
-                {item}
-              </Bubble>
-            )}
-          />
-        </View>
-        <View style={styles.wrapperVertical}>
-          <SmoothPicker
-            initialScrollToIndex={selected}
-            onScrollToIndexFailed={() => {}}
-            keyExtractor={(_, index) => index.toString()}
-            showsVerticalScrollIndicator={false}
-            bounces={true}
-            offsetSelection={40}
-            scrollAnimation
-            data={Array.from({ length: 15 }, (_, i) => 0 + i)}
-            onSelected={({ item, index }) => this.handleChange(index)}
-            renderItem={({ item, index }) => (
-              <Bubble selected={index === selected}>{item}</Bubble>
-            )}
-          />
-        </View>
-        <View>
-          <Text>{`Your selection is ${selected}`}</Text>
-        </View>
-      </View>
-    );
-  }
-}
 
 const styles = StyleSheet.create({
   container: {
     paddingTop: 60,
     paddingBottom: 30,
     flex: 1,
-    flexDirection: "column",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
   },
   wrapperHorizontal: {
-    width: 300,
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    margin: "auto",
-    color: "black",
-    marginBottom: 80
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 'auto',
+    color: 'black',
   },
   wrapperVertical: {
-    width: 100,
-    height: 300,
-    justifyContent: "center",
-    alignItems: "center",
-    margin: "auto",
-    color: "black"
+    width: 250,
+    height: 350,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 'auto',
+    color: 'black',
   },
-  itemStyleVertical: {
+  OptionWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 10,
     marginBottom: 10,
-    width: 50,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 30,
+    paddingRight: 30,
     height: 50,
-    paddingTop: 13,
-    borderWidth: 1,
-    borderColor: "grey",
-    borderRadius: 25
+    borderWidth: 3,
+    borderRadius: 10,
   },
-  itemSelectedStyleVertical: {
-    paddingTop: 11,
-    borderWidth: 2,
-    borderColor: "#DAA520"
-  },
-  itemStyleHorizontal: {
-    marginLeft: 10,
-    marginRight: 10,
-    width: 50,
-    height: 50,
-    paddingTop: 13,
-    borderWidth: 1,
-    borderColor: "grey",
-    borderRadius: 25
-  },
-  itemSelectedStyleHorizontal: {
-    paddingTop: 11,
-    borderWidth: 2,
-    borderColor: "#DAA520"
-  }
 });
+
+export default App;

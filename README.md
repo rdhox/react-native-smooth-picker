@@ -16,7 +16,7 @@ yarn add react-native-smooth-picker@alpha
 yarn add react-native-smooth-picker
 ```
 
-A React Native picker that used Flatlist component to easily display vertical or horizontal list.  
+A React Native picker coded in TypeScript that used Flatlist component to easily display vertical or horizontal list.  
 The item in the middle of the list (per default) is selected. Work exactly like a Flatlist component with the additionnals props:
 
 ### Props
@@ -35,11 +35,8 @@ The item in the middle of the list (per default) is selected. Work exactly like 
 
 ### Using Flatlist's methods
 
-To use flatlist's methods with SmoothPicker, use the reference name "smoothPicker" (see `/example/example.js`) :
+To use flatlist's methods with SmoothPicker, pass to the props "refFlatList" a ref create by "useRef" or React.CreateRef() (see `/example/example.js`) :
 
-```javascript
-this.myref.refs.smoothPicker.scrollToIndex();
-```
 
 ### Simple Example
 

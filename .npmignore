@@ -1,9 +1,9 @@
-# tests
-/src/__tests__
 # assets
 /assets
 /example
 index.js
+# code dev
+src/
 
 ios/
 android/
@@ -13,8 +13,6 @@ android/
 .DS_Store
 
 # Xcode
-#
-build/
 *.pbxuser
 !default.pbxuser
 *.mode1v3
