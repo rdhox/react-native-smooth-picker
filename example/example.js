@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Text } from "react-native";
-import SmoothPicker from "../src/SmoothPicker";
+import React, { Component } from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import SmoothPicker from '../src/SmoothPicker';
 
 const Bubble = props => {
   const { children, selected, horizontal } = props;
@@ -11,15 +11,15 @@ const Bubble = props => {
         selected &&
           (horizontal
             ? styles.itemSelectedStyleHorizontal
-            : styles.itemSelectedStyleVertical)
+            : styles.itemSelectedStyleVertical),
       ]}
     >
       <Text
         style={{
-          textAlign: "center",
+          textAlign: 'center',
           fontSize: selected ? 20 : 17,
-          color: selected ? "black" : "grey",
-          fontWeight: selected ? "bold" : "normal"
+          color: selected ? 'black' : 'grey',
+          fontWeight: selected ? 'bold' : 'normal',
         }}
       >
         {children}
@@ -30,19 +30,19 @@ const Bubble = props => {
 
 export default class App extends Component {
   state = {
-    selected: 4
+    selected: 4,
   };
 
   handleChange(index) {
     this.setState(
       {
-        selected: index
+        selected: index,
       },
       () => {
         this.refList.refs.smoothPicker.scrollToIndex({
           animated: false,
           index: index,
-          viewOffset: -30
+          viewOffset: -30,
         });
       }
     );
@@ -98,27 +98,27 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingBottom: 30,
     flex: 1,
-    flexDirection: "column",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
   },
   wrapperHorizontal: {
     width: 300,
     height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    margin: "auto",
-    color: "black",
-    marginBottom: 80
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 'auto',
+    color: 'black',
+    marginBottom: 80,
   },
   wrapperVertical: {
     width: 100,
     height: 300,
-    justifyContent: "center",
-    alignItems: "center",
-    margin: "auto",
-    color: "black"
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 'auto',
+    color: 'black',
   },
   itemStyleVertical: {
     marginTop: 10,
@@ -127,13 +127,13 @@ const styles = StyleSheet.create({
     height: 50,
     paddingTop: 13,
     borderWidth: 1,
-    borderColor: "grey",
-    borderRadius: 25
+    borderColor: 'grey',
+    borderRadius: 25,
   },
   itemSelectedStyleVertical: {
     paddingTop: 11,
     borderWidth: 2,
-    borderColor: "#DAA520"
+    borderColor: '#DAA520',
   },
   itemStyleHorizontal: {
     marginLeft: 10,
@@ -142,12 +142,12 @@ const styles = StyleSheet.create({
     height: 50,
     paddingTop: 13,
     borderWidth: 1,
-    borderColor: "grey",
-    borderRadius: 25
+    borderColor: 'grey',
+    borderRadius: 25,
   },
   itemSelectedStyleHorizontal: {
     paddingTop: 11,
     borderWidth: 2,
-    borderColor: "#DAA520"
-  }
+    borderColor: '#DAA520',
+  },
 });
