@@ -6,12 +6,6 @@
 
 ## install
 
-__Alpha version available (*branch feature-typescript*): rewrite in TypeScript, this version will not be compatible with older one__:
-
-```
-yarn add react-native-smooth-picker@alpha
-```
-
 ```
 yarn add react-native-smooth-picker
 ```
