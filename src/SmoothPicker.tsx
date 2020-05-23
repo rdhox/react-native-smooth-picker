@@ -40,6 +40,7 @@ interface Props {
   initialScrollToIndex?: number;
   startMargin?: number;
   endMargin?: number;
+  refFlatList?: React.MutableRefObject<FlatList | null>;
 }
 
 interface State {
@@ -61,8 +62,10 @@ class SmoothPicker extends Component<Props, State> {
     scrollPosition: null,
   };
 
-  shouldComponentUpdate(nextProps: Props, nextState: State) {
-    return nextState.selected !== this.state.selected;
+  componentDidMount() {
+    if (this.props.refFlatList) {
+      this.props.refFlatList.current = this.refList.current;
+    }
   }
 
   _alignAfterMount = () => {
