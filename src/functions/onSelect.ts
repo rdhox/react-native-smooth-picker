@@ -6,7 +6,7 @@ export default function(
   options: Option[],
   handleSelection: HandleSelection,
   scrollPosition: number | null,
-  horizontal: boolean
+  horizontal: boolean | null
 ) {
   const cursor = horizontal
     ? nativeEvent.contentOffset.x

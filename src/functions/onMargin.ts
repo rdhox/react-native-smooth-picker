@@ -1,5 +1,5 @@
 export function marginStart(
-  horizontal: boolean,
+  horizontal: boolean | null,
   index: number,
   size: number,
   offset: number,
@@ -14,7 +14,7 @@ export function marginStart(
     : 0;
 }
 export function marginEnd(
-  horizontal: boolean,
+  horizontal: boolean | null,
   length: number,
   index: number,
   size: number,

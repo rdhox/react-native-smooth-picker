@@ -3,7 +3,7 @@ import { FlatList} from 'react-native';
 import { Option } from '../SmoothPicker';
 
 export default function(
-  horizontal: boolean,
+  horizontal: boolean | null,
   scrollAnimation: boolean,
   option: Option,
   refFlatlist: RefObject<FlatList>

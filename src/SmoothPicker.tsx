@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, FlatList, LayoutRectangle } from 'react-native';
+import { View, FlatList, LayoutRectangle, FlatListProps, ListRenderItemInfo } from 'react-native';
 import onSelect from './functions/onSelect';
 import alignSelect from './functions/alignSelect';
 import { marginStart, marginEnd } from './functions/onMargin';
@@ -26,13 +26,9 @@ export interface Snap {
 
 export type HandleSelection =  (item: any, index: number, scrollPosition: number) => void;
 
-interface Props {
-  data: any[];
-  renderItem: (obj: ListReturn) => React.ReactNode;
+interface Props extends FlatListProps<any> {
   onSelected?: (obj: ListReturn) => void;
-  horizontal?: boolean;
   offsetSelection?: number;
-  decelerationRate?: number;
   magnet?: boolean;
   scrollAnimation?: boolean;
   snapInterval?: number | null;
@@ -91,7 +87,7 @@ class SmoothPicker extends Component<Props, State> {
     }
   };
 
-  _save = (i: number, layout: LayoutRectangle, item: any, horizontal: boolean) => {
+  _save = (i: number, layout: LayoutRectangle, item: any, horizontal: boolean | null) => {
     const nOpt: Option = {
       layout,
       item,
@@ -133,7 +129,7 @@ class SmoothPicker extends Component<Props, State> {
     });
   };
 
-  _renderItem = (info: ListReturn) => {
+  _renderItem = (info: ListRenderItemInfo<any>) => {
     const {
       data,
       renderItem,
@@ -144,6 +140,11 @@ class SmoothPicker extends Component<Props, State> {
     } = this.props;
 
     const { item, index } = info;
+
+    if (!data) {
+      return null;
+    }
+
     return (
       <View
         key={index}
@@ -189,7 +190,7 @@ class SmoothPicker extends Component<Props, State> {
           ),
         }}
       >
-        {renderItem(info)}
+        {renderItem && renderItem(info)}
       </View>
     );
   };
