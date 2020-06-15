@@ -8,11 +8,9 @@
 
 https://snack.expo.io/@rdhox/smoothpicker
 
-Flash for expo app:  
+Flash for expo app:   
 
-[expo]: https://github.com/rdhox/react-native-smooth-picker/blob/master/assets/expo.png =250x "expo demo react-native-smooth-picker"
-
-![alt text][expo]
+!["expo demo react-native-smooth-picker"](https://github.com/rdhox/react-native-smooth-picker/blob/master/assets/expo.png =250x)
 
 
 ## install
