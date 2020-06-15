@@ -24,12 +24,54 @@ The item in the middle of the list (per default) is selected. Work exactly like 
 | scrollAnimation      |                                                                                       true if you want the scroll te be animated                                                                                       | boolean  |    false |
 | snapInterval         | if all items of the list have the same height (vertical) or width (horizontal), enter the dimension here to activate the snapToInterval props. Notice that if you use this prop, the magnet comportment will not work. |  number  |     null |
 | snapToAlignment      |                                                                   If you use snapInterval, you can set snapToAlignment to 'start', 'center', 'end'.                                                                    |   enum   | 'center' |
-| startMargin          |                                 Values of margins at the extremities of the list are calculated automatically. If values do not correspond to your need, you can enter them manually.                                  |  number  |          |
-| endMargin            |                                 Values of margins at the extremities of the list are calculated automatically. If values do not correspond to your need, you can enter them manually.                                  |  number  |          |
+| startMargin          |                                 Values of margins at the ends of the list are calculated automatically. If values do not correspond to your need, you can enter them manually.                                  |  number  |          |
+| endMargin            |                                 Values of margins at the ends of the list are calculated automatically. If values do not correspond to your need, you can enter them manually.                                  |  number  |          |
 
 ### Using Flatlist's methods
 
-To use flatlist's methods with SmoothPicker, pass to the props "refFlatList" a ref create by "useRef" or React.CreateRef() (see `/example/example.js`) :
+To use flatlist's methods with SmoothPicker, pass to the props "refFlatList" a ref create by "useRef" or React.CreateRef() (see `/example/example.js`).
+
+### __!! Important !!__
+
+ 1. To avoid strange behaviour, be sure that your list's items have a define `width` or `height` (depending if the list is horizontal or vertical).
+ 2. To be able to scroll and select the items at the ends of the list, a View component contain the Flatlist component to create margin. Those margins are calculated automatically, but you can also enter their value with the props `startMargin` and `endMargin`.
+
+ __=> Being aware of those two points should help you having a good behaviour. You can add a `View` component around the Smoothpicker to make it goes with your UI. Example to have the list centered at the mount:__
+
+```javascript
+...
+
+function handleChange(index) {
+  if(!startedToScroll) {
+    setStartedToScroll(true);
+  }
+  setIndexSelected(index);
+}
+
+...
+
+<WrapperList start={!startedToScroll} >
+  <SmoothPicker
+    data={list}
+    keyExtractor={item => `${item.id}-list`}
+    initialScrollToIndex={indexSelected}
+    scrollAnimation
+    showsVerticalScrollIndicator={false}
+    onSelected={({ item, index }) => handleChange(index)}
+    renderItem={({item, index}) => <Item>...</Item>}
+  />
+</WrapperList>
+
+...
+
+const WrapperList = styled.View`
+  width: 100%;
+  height: 350px;
+  justify-content: center;
+  align-items: center;
+  padding-top: ${({start}) => start ? '150px' : '0px'};
+`;
+```
 
 
 ### Simple Example
