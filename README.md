@@ -12,7 +12,7 @@ Flash for expo app:
 
 [expo]: https://github.com/rdhox/react-native-smooth-picker/blob/master/assets/expo.png "expo demo react-native-smooth-picker"
 
-![alt text][expo]
+![alt text][expo =250x]
 
 
 ## install
