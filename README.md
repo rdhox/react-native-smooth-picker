@@ -4,6 +4,17 @@
 
 ![alt text][example]
 
+## DEMO
+
+https://snack.expo.io/@rdhox/smoothpicker
+
+Flash for expo app:  
+
+[expo]: https://github.com/rdhox/react-native-smooth-picker/blob/master/assets/expo.png "expo demo react-native-smooth-picker"
+
+![alt text][expo]
+
+
 ## install
 
 ```
