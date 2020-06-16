@@ -35,6 +35,10 @@ The item in the middle of the list (per default) is selected. Work exactly like 
 | snapToAlignment      |                                                                   If you use snapInterval, you can set snapToAlignment to 'start', 'center', 'end'.                                                                    |   enum   | 'center' |
 | startMargin          |                                 Values of margins at the ends of the list are calculated automatically. If values do not correspond to your need, you can enter them manually.                                  |  number  |          |
 | endMargin            |                                 Values of margins at the ends of the list are calculated automatically. If values do not correspond to your need, you can enter them manually.                                  |  number  |          |
+| selectOnPress | Activate the item selection by pressing it (add a TouchableOpacity component around your item) | boolean | false |
+| styleButton | Style of the TouchableOpacity if selectOnPress is true | View.style | {} |
+| activeOpacityButton | Determines what the opacity of the wrapped view should be when TouchableOpacity is true. | number | 0.2 |
+
 
 ### Using Flatlist's methods
 
