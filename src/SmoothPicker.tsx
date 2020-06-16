@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
-import { View, FlatList, LayoutRectangle, FlatListProps, ListRenderItemInfo } from 'react-native';
+import {
+  View,
+  FlatList,
+  TouchableOpacity,
+  LayoutRectangle,
+  FlatListProps,
+  ListRenderItemInfo,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 import onSelect from './functions/onSelect';
 import alignSelect from './functions/alignSelect';
 import { marginStart, marginEnd } from './functions/onMargin';
@@ -24,7 +33,7 @@ export interface Snap {
   snapToAlignment: SnapAlignement,
 }
 
-export type HandleSelection =  (item: any, index: number, scrollPosition: number) => void;
+export type HandleSelection =  (item: any, index: number, scrollPosition: number | null) => void;
 
 interface Props extends FlatListProps<any> {
   onSelected?: (obj: ListReturn) => void;
@@ -37,6 +46,9 @@ interface Props extends FlatListProps<any> {
   startMargin?: number;
   endMargin?: number;
   refFlatList?: React.MutableRefObject<FlatList | null>;
+  selectOnPress?: boolean;
+  styleButton?:  StyleProp<ViewStyle>;
+  activeOpacityButton?: number;
 }
 
 interface State {
@@ -129,7 +141,7 @@ class SmoothPicker extends Component<Props, State> {
     });
   };
 
-  _renderItem = (info: ListRenderItemInfo<any>) => {
+  _renderItem = (info: ListRenderItemInfo<any>):(JSX.Element | null) => {
     const {
       data,
       renderItem,
@@ -137,9 +149,16 @@ class SmoothPicker extends Component<Props, State> {
       offsetSelection = 0,
       startMargin,
       endMargin,
+      selectOnPress,
+      styleButton = {},
+      activeOpacityButton = 0.2,
     } = this.props;
 
     const { item, index } = info;
+
+    const handlePressOnItem = (): void => {
+      this._handleSelection(item, index, null);
+    };
 
     if (!data) {
       return null;
@@ -190,12 +209,21 @@ class SmoothPicker extends Component<Props, State> {
           ),
         }}
       >
-        {renderItem && renderItem(info)}
+        {renderItem && !selectOnPress && renderItem(info)}
+        {renderItem && selectOnPress && (
+          <TouchableOpacity
+            onPress={handlePressOnItem}
+            style={styleButton}
+            activeOpacity={activeOpacityButton}
+          >
+            {renderItem(info)}
+          </TouchableOpacity>
+        )}
       </View>
     );
   };
 
-  render() {
+  render(): JSX.Element {
     const {
       horizontal = false,
       magnet = false,
