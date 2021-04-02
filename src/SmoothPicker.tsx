@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   View,
-  FlatList,
+  FlatList as RNFlatList,
   TouchableOpacity,
   LayoutRectangle,
   FlatListProps,
@@ -12,6 +12,7 @@ import {
 import onSelect from './functions/onSelect';
 import alignSelect from './functions/alignSelect';
 import { marginStart, marginEnd } from './functions/onMargin';
+import {FlatList as GHFlatList} from 'react-native-gesture-handler';
 
 export interface ListReturn {
   item: any;
@@ -45,10 +46,11 @@ interface Props extends FlatListProps<any> {
   initialScrollToIndex?: number;
   startMargin?: number;
   endMargin?: number;
-  refFlatList?: React.MutableRefObject<FlatList | null>;
+  refFlatList?: React.MutableRefObject<RNFlatList | null>;
   selectOnPress?: boolean;
   styleButton?:  StyleProp<ViewStyle>;
   activeOpacityButton?: number;
+  flatListType?: string;
 }
 
 interface State {
@@ -63,7 +65,7 @@ class SmoothPicker extends Component<Props, State> {
   fingerAction: boolean = false;
   options: Option[] = [];
   countItems: number = 0;
-  refList: React.RefObject<FlatList> = React.createRef();
+  refList: React.RefObject<RNFlatList> = React.createRef();
 
   state = {
     selected: this.props.initialScrollToIndex || 1,
@@ -230,6 +232,7 @@ class SmoothPicker extends Component<Props, State> {
       snapInterval = null,
       snapToAlignment = 'center',
       scrollAnimation = false,
+      flatListType = 'react-native',
     } = this.props;
 
     let snap: Snap = {} as Snap;
@@ -239,6 +242,7 @@ class SmoothPicker extends Component<Props, State> {
         snapToAlignment: snapToAlignment,
       };
     }
+    const FlatList = flatListType === 'gesture-handler' ? GHFlatList : RNFlatList;
     return (
       <FlatList
         {...this.props}
