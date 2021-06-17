@@ -35,7 +35,7 @@ export interface Snap {
 
 export type HandleSelection =  (item: any, index: number, scrollPosition: number | null) => void;
 
-interface Props extends FlatListProps<any> {
+export interface SmoothPickerProps extends FlatListProps<any> {
   onSelected?: (obj: ListReturn) => void;
   offsetSelection?: number;
   magnet?: boolean;
@@ -56,7 +56,7 @@ interface State {
   scrollPosition: number | null;
 }
 
-class SmoothPicker extends Component<Props, State> {
+class SmoothPicker extends Component<SmoothPickerProps, State> {
   widthParent: number = 0;
   heightParent: number = 0;
   onMomentum: boolean = false;
